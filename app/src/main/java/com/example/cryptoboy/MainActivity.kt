@@ -1,6 +1,7 @@
 package com.example.cryptoboy
 
 import android.content.Context
+import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.security.crypto.EncryptedFile
@@ -12,6 +13,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val myAudioRecorder: MediaRecorder? = null
         val masterKey = MasterKey.Builder(this, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
@@ -77,4 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
         return ret
     }
+
+    // updates the visualizer every 50 milliseconds
+
 }

@@ -15,6 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 import android.widget.Toast
 
 import android.os.Environment
+import java.lang.StringBuilder
 
 
 class MainActivity3 : AppCompatActivity() {
@@ -32,6 +33,10 @@ class MainActivity3 : AppCompatActivity() {
         val c: Cipher = Cipher.getInstance("DES/CBC/PKCS5Padding")
         writeFile()
         encryptDownloadedFile()
+        val file = decryptEncryptedFile()
+
+
+
     }
 
     @Throws(Exception::class)
@@ -43,7 +48,7 @@ class MainActivity3 : AppCompatActivity() {
         return keyGenerator?.generateKey()
     }
 
-    fun saveSecretKey(sharedPref: SharedPreferences, secretKey: SecretKey): String {
+    private fun saveSecretKey(sharedPref: SharedPreferences, secretKey: SecretKey): String {
         val encodedKey = Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
         sharedPref.edit().putString("secretKeyPref", encodedKey).apply()
         return encodedKey
@@ -82,18 +87,25 @@ class MainActivity3 : AppCompatActivity() {
     }
 
 
-    fun encryptDownloadedFile() {
+    private fun encryptDownloadedFile() {
         try {
 
-            println("tridiv " + filePath+"/testCrypto")
-            val fileData = readFile(filePath+"/testCrypto")
+
+            val fileData = readFile(filePath+"/testCrypto/crypto.txt")
 //
 //            //get secret key
             val secretKey = getSecretKey(sharedPref)
 //            //encrypt file
             val encodedData = encrypt(secretKey, fileData)
 //
+            println(encodedData.size)
+
+            for (i in encodedData){
+                println("tridiv "+i)
+            }
+
             saveFile(encodedData, filePath)
+
 
         } catch (e: Exception) {
 //            Log.d(mTag, e.message)
@@ -117,7 +129,7 @@ class MainActivity3 : AppCompatActivity() {
     }
 
 
-    fun getSecretKey(sharedPref: SharedPreferences): SecretKey {
+    private fun getSecretKey(sharedPref: SharedPreferences): SecretKey {
 
         val key = sharedPref.getString("secretKeyPref", null)
 
@@ -135,7 +147,7 @@ class MainActivity3 : AppCompatActivity() {
     }
 
 
-    fun writeFile() {
+    private fun writeFile() {
         try {
             val root = File(filePath, "testCrypto")
             if (!root.exists()) {
@@ -152,5 +164,18 @@ class MainActivity3 : AppCompatActivity() {
         }
 
 
+    }
+
+    @Throws(IOException::class)
+    private fun readFile(file : File) {
+        val uploadedString = StringBuilder()
+        val reader = BufferedReader(FileReader(file))
+        var line: String?
+        while (reader.readLine().also { line = it } != null) {
+            uploadedString.append(line)
+            uploadedString.append('\n')
+        }
+       println("tridiv "+uploadedString.toString())
+//        reader.close()
     }
 }
