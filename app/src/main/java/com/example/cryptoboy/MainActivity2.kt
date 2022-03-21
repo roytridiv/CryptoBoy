@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -34,7 +35,7 @@ class MainActivity2 : AppCompatActivity() {
     private var fileName: String = ""
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
-    private var recording : Boolean = false
+    private var recording: Boolean = false
     private val sharedPref: SharedPreferences by lazy {
         getSharedPreferences(
             "permissions",
@@ -156,18 +157,38 @@ class MainActivity2 : AppCompatActivity() {
         val file = File(filePath + "/testCrypto")
         file.mkdirs()
 
-        recorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
-            setOutputFile(filePath + "/testCrypto/crypto.mp3")
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
 
-            try {
-                prepare()
-            } catch (e: IOException) {
-                Log.e(LOG_TAG, "prepare() failed")
-            }
-            start()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            recorder =
+                MediaRecorder(this).apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
+                    setOutputFile(filePath + "/testCrypto/crypto.mp3")
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+
+                    try {
+                        prepare()
+                    } catch (e: IOException) {
+                        Log.e(LOG_TAG, "prepare() failed")
+                    }
+                    start()
+                }
+        } else {
+            recorder =
+                MediaRecorder().apply {
+                    setAudioSource(MediaRecorder.AudioSource.MIC)
+                    setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
+                    setOutputFile(filePath + "/testCrypto/crypto.mp3")
+                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+
+                    try {
+                        prepare()
+                    } catch (e: IOException) {
+                        Log.e(LOG_TAG, "prepare() failed")
+                    }
+                    start()
+                }
         }
     }
 
@@ -321,11 +342,11 @@ class MainActivity2 : AppCompatActivity() {
     }
 
     private val handler = Handler()
-    val REPEAT_INTERVAL = 40
+    val REPEAT_INTERVAL = 80
 
     var updateVisualizer: Runnable = object : Runnable {
         override fun run() {
-            if (true) // if we are already recording
+            if (recording) // if we are already recording
             {
                 // get the current amplitude
                 val x: Int = recorder!!.getMaxAmplitude()
@@ -339,7 +360,6 @@ class MainActivity2 : AppCompatActivity() {
             }
         }
     }
-
 
 
 }
