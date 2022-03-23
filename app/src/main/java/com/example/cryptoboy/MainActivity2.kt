@@ -12,9 +12,11 @@ import android.os.Environment
 import android.os.Handler
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.transition.Visibility
 import com.example.cryptoboy.databinding.ActivityMain2Binding
 import java.io.*
 import java.security.SecureRandom
@@ -140,6 +142,8 @@ class MainActivity2 : AppCompatActivity() {
 
 
     private fun startRecording() {
+        binding.startBtn.visibility = View.GONE
+        binding.stopBtn.visibility = View.VISIBLE
         if (recorder != null) {
             try {
                 recorder!!.stop()
@@ -197,6 +201,8 @@ class MainActivity2 : AppCompatActivity() {
             stop()
             release()
         }
+        binding.stopBtn.visibility = View.GONE
+        binding.startBtn.visibility = View.VISIBLE
         recorder = null
         encryptFile()
     }
