@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.text.format.Formatter
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -239,10 +240,13 @@ class MainActivity2 : AppCompatActivity() {
             val secretKey = getSecretKey(sharedPref)
 //            //encrypt file
             val file = readFile()
+            val file_size2 = Formatter.formatShortFileSize(this,file.size.toLong())
+            val file_size: Int = java.lang.String.valueOf(file.size / 1024).toInt()
+
+            println("FILE_SIZE---------------->"+file_size+"-------"+file_size2)
+            binding.fileSize.text = "size : $file_size2"
             var encodedData: ByteArray? = null
-            if (file != null) {
-                encodedData = encrypt(secretKey, file)
-            }
+            encodedData = encrypt(secretKey, file)
 
 
             encodedData?.let {

@@ -99,7 +99,7 @@ class RecorderVisualizerView(context: Context?, attrs: AttributeSet?) : View(con
                         - scaledHeight / 2, linePaint!!
             )
 
-//            curX+= 2f
+            curX+= 2f
 
 
 //            canvas.drawRect(0f, 0f, 10f, getHeight().toFloat(), linePaint2!!)
