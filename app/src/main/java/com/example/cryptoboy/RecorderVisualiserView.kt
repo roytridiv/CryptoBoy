@@ -18,9 +18,9 @@ import android.graphics.DashPathEffect
 
 
 class RecorderVisualizerView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-    val LINE_WIDTH = 10 // width of visualizer lines
+    val LINE_WIDTH = 2 // width of visualizer lines
 
-    val LINE_SCALE = 50 // scales visualizer lines
+    val LINE_SCALE = 100 // scales visualizer lines
 
     var amplitudes // amplitudes for line lengths
             : MutableList<Float>? = null
@@ -99,7 +99,7 @@ class RecorderVisualizerView(context: Context?, attrs: AttributeSet?) : View(con
                         - scaledHeight / 2, linePaint!!
             )
 
-            curX+= 2f
+//            curX+= 2f
 
 
 //            canvas.drawRect(0f, 0f, 10f, getHeight().toFloat(), linePaint2!!)
